@@ -6,7 +6,8 @@ description: >
   and documented by a Writer. Use this when the user wants to explore an idea,
   brainstorm directions, or develop a concept from a seed into actionable idea
   briefs. Use "continue" mode to resume and build on a previous session.
-argument-hint: "concept seed (file path or inline description). Use 'continue <path>' to resume a previous session."
+  Use "prd" mode to generate a Product Requirements Document from a completed session.
+argument-hint: "concept seed (file path or inline description). Use 'continue <path>' to resume a previous session. Use 'prd <path>' to generate a PRD from a completed session."
 user-invocable: true
 ---
 
@@ -120,6 +121,25 @@ Triggered when the argument starts with **"continue"** (e.g.,
    prompt: *"This is a continuation of a previous session. Here is the prior
    vision and briefs. Build on this work — do not start from scratch."*
 5. Skip Step 2 (directory creation) — the directory already exists.
+
+### PRD Mode
+
+Triggered when the argument starts with **"prd"** (e.g.,
+`/ideation prd ideation-distributed-systems-20260219-143052/` or
+`/ideation prd distributed-systems`).
+
+This is a **solo operation** — no team is needed. You read the session's
+completed output and produce a Product Requirements Document. Skip Steps 1–6
+entirely and follow the **PRD Generation** section below instead.
+
+**Resolving the session directory** uses the same logic as Continue Mode:
+
+1. **Path given and exists** — use it directly.
+2. **Keyword given (not a path)** — search CWD for `ideation-*<keyword>*`:
+   - Single match → use it.
+   - Multiple matches → present via `AskUserQuestion`.
+   - No matches → ask for clarification.
+3. **Nothing found** — ask the user.
 
 ---
 
@@ -1587,6 +1607,178 @@ distribution page HTML, build the script, and generate both PDFs.
                                                      │
                                                reports complete
 ```
+
+---
+
+## PRD Generation
+
+This section applies when the skill is invoked in **PRD mode** (`/ideation prd
+<session>`). It is a solo operation — no team, no spawning, no multi-agent
+orchestration. You read the session's completed output and produce a single
+PRD document.
+
+### What This PRD Is For
+
+The ideation session produces rich, emotionally resonant output — vision
+documents, briefs, a designed distribution page. That output is the *heart*
+of what the ideation team discovered: the why behind every decision, the
+language that captured the intent, the boundaries they drew and the reasoning
+behind them.
+
+This PRD translates that output into a document another agent can use to plan
+and execute implementation. **The receiving agent will not have been part of
+the ideation session.** They won't have the emotional context, the dialogue
+history, or the creative reasoning. This document is their bridge.
+
+### The Core Principle: What and Why, Not How
+
+The PRD focuses on **what** should be built and **why** — not **how** to
+build it. The implementing agent figures out the how.
+
+**Exception:** If the ideation team *defined* specific technical approaches,
+interaction patterns, or mechanisms — because the user gave them documentation
+about the system, or because the brainstorm went deep into a specific surface
+area — that technical detail should be **preserved as context**, not stripped
+out. But it lives in the feature area's "Relevant Session Context" or in the
+appendix, not mixed into the requirements themselves.
+
+The distinction:
+- **PRD proper** = What we're asking for + Why we're asking for it
+- **Ideation team's technical thinking** = Preserved as context for the
+  implementer, clearly marked as coming from the creative process
+
+### The Cardinal Rule: Err on Inclusion
+
+When in doubt, **leave it in**. It is better to include too much from the
+ideation session than to cut something that carried intent. If you include
+something extra, the implementing agent can decide to deprioritize it. If you
+cut something that mattered, the intent is lost forever.
+
+This does not mean copying the session output verbatim. Restructure it.
+Group it into feature areas. Write it as requirements. But do not compress
+away the reasoning, the emotional logic, or the language the session converged
+on. Those carry meaning that a bare feature list cannot.
+
+### How to Generate the PRD
+
+**Step 1: Read the session's results.**
+
+Read these files from the resolved session directory, in this order:
+
+1. `session/sources/request.md` — the original user request
+2. `session/VISION_<slug>.md` — the vision document (primary source)
+3. `session/briefs/*.md` — all idea briefs
+4. `session/SESSION_SUMMARY.md` — session summary
+5. `index.html` — the distribution page (read for content, not markup)
+6. `session/research/*.md` — research reports (if any exist)
+7. `session/sources/manifest.md` — to understand what inputs were provided
+
+The **vision document** is your primary source. The briefs provide depth on
+individual ideas. The distribution page / index.html often contains the most
+polished, designed presentation of the content — it's where a lot of the
+heart is. The session summary and research reports provide additional context.
+
+**Step 2: Understand the shape of what was created.**
+
+Before writing, identify:
+
+- What is the **core thesis** and **governing principle**?
+- What are the **moves/ideas** the session confirmed as interesting?
+- Which of those feel like they belong together as **feature areas**?
+- What **design decisions** did the session treat as settled?
+- What **boundaries** did it establish?
+- What **open questions** remain?
+- Did the ideation team go deep on any **technical specifics** or
+  **interaction patterns** that should be preserved?
+
+**Step 3: Write the PRD.**
+
+Use the template at `.claude/skills/ideation/templates/prd.md` as your
+structure. Fill in each section following these guidelines:
+
+- **Vision section**: Carry the core thesis and governing principle *verbatim*
+  from the vision document. These are the words the session converged on.
+  Don't paraphrase them into corporate language.
+
+- **"What We're Asking For" section**: Write a narrative description of the
+  product direction. Not features — the *picture* of what this product is
+  trying to be. The implementing agent needs to feel the intent before they
+  see the details.
+
+- **Feature Areas**: This is where you do the most translation work.
+  - Group the session's moves/ideas into coherent feature areas
+  - If the session developed its own grouping structure (e.g., "heart, habit,
+    feel" or "three pillars"), **use that structure** — don't impose your own
+  - For each feature area, state the **what** (outcomes, not implementation)
+    and the **why** (reasoning, intent, emotional logic)
+  - Include **key requirements** — specific things each area needs to
+    accomplish, stated as outcomes. Be generous. If the ideation session
+    discussed something that feels like a requirement, include it.
+  - Include **relevant session context** — language, framings, metaphors,
+    technical details from the session. If the Free Thinker described an
+    interaction in evocative terms, include that. If the team discussed
+    specific mechanisms, include those. This is context, not directive.
+
+- **How These Fit Together**: Carry this from the vision document. The
+  implementing agent needs to understand the unified picture, not just
+  isolated features.
+
+- **Design Decisions Already Made**: Include the reasoning, not just the
+  conclusions. "We decided X because Y" is far more useful than "X."
+
+- **Boundaries**: Include the reasoning. Understanding *why* a direction was
+  killed is as valuable as knowing it was.
+
+- **Open Questions**: Present with enough context that someone new to this
+  work understands why the question is hard. These are real tensions, not
+  TODO items.
+
+- **Appendix**: Include the original request in full. List all session
+  artifacts with their paths so the implementing agent knows what's available
+  for deeper reference.
+
+**Step 4: Save the PRD.**
+
+Write the completed PRD to:
+```
+{session-output}/PRD_<concept-slug>.md
+```
+
+Tell the user where the file was saved and give a brief summary of what
+feature areas you identified and how the content was organized.
+
+### What Good PRD Output Looks Like
+
+A good PRD from this process:
+
+- **Reads like it was written by someone who cares about the product**, not
+  by someone filling out a template. The ideation session produced passionate,
+  creative output. The PRD should carry that energy forward even as it
+  structures the content into requirements.
+
+- **Makes the implementing agent feel the intent.** After reading this, they
+  should understand not just what to build, but *why it matters* — what
+  experience the product is trying to create, what emotional logic connects
+  the features, what would be lost if key elements were dropped.
+
+- **Doesn't lose the session's language.** When the ideation team found the
+  right words for something, those words should appear in the PRD. Don't
+  translate evocative language into sterile requirements-speak.
+
+- **Groups things sensibly.** The session may have produced five separate
+  "moves" that really cluster into two or three feature areas. Or the
+  session's own structure may be the right grouping. Use judgment, but
+  preserve the session's framing when it works.
+
+- **Doesn't prescribe implementation** unless the ideation team did. The PRD
+  says "users should feel X when they do Y" not "build a React component
+  that..." — unless the ideation session itself went to that level of
+  specificity, in which case that detail is preserved as context.
+
+- **Errs on the side of too much.** The implementing agent can trim. They
+  can't recover intent that was cut.
+
+---
 
 ### Post-Convergence: User Re-Engagement
 

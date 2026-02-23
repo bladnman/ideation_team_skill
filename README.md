@@ -44,6 +44,7 @@ Claude Code discovers skills automatically — no restart needed. Verify it's in
     ├── idea-brief.md
     ├── idea-report.md
     ├── ideation-graph.md
+    ├── prd.md
     ├── session-summary.md
     └── vision-document.md
 ```
@@ -93,6 +94,22 @@ Or search by keyword (matches against `ideation-*<keyword>*` directories in CWD)
 
 Continue mode reads the existing vision document, briefs, and sources, then spawns the team with that context so they build on prior work instead of starting from scratch.
 
+### Generate a PRD from a session
+
+After an ideation session completes, generate a Product Requirements Document that translates the session's creative output into structured requirements:
+
+```
+/ideation prd ideation-distributed-systems-20260219-143052/
+```
+
+Or search by keyword:
+
+```
+/ideation prd distributed-systems
+```
+
+PRD mode is a solo operation — no team is spawned. It reads the session's vision document, briefs, distribution page, and other artifacts, then produces a `PRD_<concept-slug>.md` in the session directory. The PRD focuses on *what* to build and *why*, preserving the ideation session's intent, emotional logic, and language. Technical details from the session are included as context, not as implementation directives.
+
 ## How It Works
 
 The system separates cognitive modes across distinct roles because combining them in a single agent produces biased output:
@@ -114,6 +131,7 @@ ideation-<slug>-<YYYYMMDD-HHMMSS>/
   RESULTS_<concept>.pdf            # PDF of the distribution page
   CAPSULE_<concept>.pdf            # Comprehensive session archive
   PRESENTATION_<concept>.pptx      # Slide deck
+  PRD_<concept>.md                 # Product requirements (generated via /ideation prd)
   images/                          # Infographic images
 
   session/
