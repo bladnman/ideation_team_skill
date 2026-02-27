@@ -98,3 +98,31 @@ that shaped the direction of the whole conversation._
 | 5 | Arbiter flagged Thread B as interesting | Shifted dialogue focus toward B-adjacent spaces |
 
 -->
+
+## Continuation Context
+
+<!-- This section is populated when this session is used as a parent for a
+     continuation. It helps the next session's agents understand where to pick
+     up. Omit this section entirely for sessions that have not been continued. -->
+
+### Recommended Continuation Points
+
+_Threads or directions that are most promising for further exploration. These
+are the natural starting points for a continuation session._
+
+<!-- Format:
+
+- **Thread [letter]: [name]** — [why this is worth continuing, what's unresolved]
+- **Connection between [X] and [Y]** — [emerging pattern worth dedicated exploration]
+
+-->
+
+### Session State at Close
+
+**Depth level used:** [quick | standard | deep | exhaustive]
+**Total idea reports:** [number]
+**Interesting list size:** [number]
+**Convergence quality:** [natural / forced / partial — brief note on how the session ended]
+
+<!-- This metadata helps continuation sessions calibrate their depth and
+     understand what the parent session accomplished. -->

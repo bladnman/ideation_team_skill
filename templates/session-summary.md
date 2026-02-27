@@ -3,6 +3,19 @@
 **Date:** [date]
 **Concept seed:** [name/path]
 **Produced by:** Writer
+**Depth:** [quick | standard | deep | exhaustive]
+**Session directory:** [directory name]
+
+### Lineage
+<!-- Omit this section for original (non-continuation) sessions -->
+**Parent session:** [parent directory name]
+**Parent version:** [v1, v2, etc.]
+**Continuation focus:** [what this session explored/deepened]
+**Branch point:** [thread ID or snapshot, if branched]
+
+### Configuration
+**Tier 2 outputs selected:** [list of selected outputs, or "all" / "none"]
+**Research mode:** [auto-detect | pre-session | parallel | none | on-demand]
 
 ---
 

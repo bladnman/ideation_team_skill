@@ -1,0 +1,36 @@
+# Session Configuration
+# Produced by the Plan action, consumed by the Ideate action.
+# Continue mode reads the parent's config and creates a modified copy.
+
+concept_seed: "[description or file ref]"
+concept_slug: "[slug]"
+
+# Lineage (populated for continuations, null for new sessions)
+parent_session: null
+parent_version: null
+continuation_focus: null
+branch_point: null
+
+# Depth
+depth:
+  level: "standard"          # quick | standard | deep | exhaustive
+  max_rounds: null           # null = use level default
+  confidence_threshold: null # null = use level default
+
+# Outputs (Tier 2 — Tier 1 session artifacts always produced)
+outputs:
+  predefined:
+    distribution_page: true
+    results_pdf: true
+    capsule_pdf: true
+    presentation: true
+    infographic_images: true
+  custom: []
+  # - type: "competitive_analysis"
+  #   description: "Comparison matrix against competitors"
+  #   format: "markdown"
+
+# Research
+research:
+  mode: null    # auto-detect | pre-session | parallel | none | on-demand
+  topics: []
