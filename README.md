@@ -23,13 +23,13 @@ Clone this repo into your `.claude/skills/` directory — either **project-level
 **Project-level** (committed with your repo, available to collaborators):
 ```bash
 mkdir -p .claude/skills
-git clone https://github.com/bladnman/ideation .claude/skills/ideation
+git clone https://github.com/bladnman/ideation_team_skill .claude/skills/ideation
 ```
 
 **Personal/global** (available in all your Claude Code sessions):
 ```bash
 mkdir -p ~/.claude/skills
-git clone https://github.com/bladnman/ideation ~/.claude/skills/ideation
+git clone https://github.com/bladnman/ideation_team_skill ~/.claude/skills/ideation
 ```
 
 Claude Code discovers skills automatically — no restart needed. Verify it's installed by typing `/ideation` in a Claude Code session.
