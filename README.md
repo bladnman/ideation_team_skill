@@ -176,35 +176,37 @@ A human provides the seed concept. The **Plan** action interviews the user to co
 
 ## Output
 
-Each invocation creates a uniquely named directory:
+Each invocation creates a uniquely named directory inside an `ideations/`
+parent folder, keeping all sessions organized:
 
 ```
-ideation-<slug>-<YYYYMMDD-HHMMSS>/
-  index.html                       # Designed distribution page (if selected)
-  RESULTS_<concept>.pdf            # PDF of the distribution page (if selected)
-  CAPSULE_<concept>.pdf            # Comprehensive session archive (if selected)
-  PRESENTATION_<concept>.pptx      # Slide deck (if selected)
-  PRD_<concept>.md                 # Product requirements (generated via /ideation prd)
-  images/                          # Infographic images (if selected)
+ideations/
+  ideation-<slug>-<YYYYMMDD-HHMMSS>/
+    index.html                       # Designed distribution page (if selected)
+    RESULTS_<concept>.pdf            # PDF of the distribution page (if selected)
+    CAPSULE_<concept>.pdf            # Comprehensive session archive (if selected)
+    PRESENTATION_<concept>.pptx      # Slide deck (if selected)
+    PRD_<concept>.md                 # Product requirements (generated via /ideation prd)
+    images/                          # Infographic images (if selected)
 
-  session/
-    session-config.yaml            # Session configuration
-    VISION_<concept>.md            # Consolidated vision document
-    SESSION_SUMMARY.md             # Session summary
-    ideation-graph.md              # Living graph of the dialogue
-    LINEAGE.md                     # Version chain (for continuations)
-    sources/                       # All original input materials
-    research/                      # Explorer's research reports
-    briefs/                        # Final idea briefs
-    idea-reports/                  # Raw idea reports from dialogue
-    snapshots/                     # Writer's version snapshots
+    session/
+      session-config.yaml            # Session configuration
+      VISION_<concept>.md            # Consolidated vision document
+      SESSION_SUMMARY.md             # Session summary
+      ideation-graph.md              # Living graph of the dialogue
+      LINEAGE.md                     # Version chain (for continuations)
+      sources/                       # All original input materials
+      research/                      # Explorer's research reports
+      briefs/                        # Final idea briefs
+      idea-reports/                  # Raw idea reports from dialogue
+      snapshots/                     # Writer's version snapshots
 
-  build/
-    build_capsule.py               # Regenerates both PDFs
-    build_presentation.py          # Regenerates the PPTX
+    build/
+      build_capsule.py               # Regenerates both PDFs
+      build_presentation.py          # Regenerates the PPTX
 ```
 
-Example: `ideation-voice-memos-20260219-143052/`
+Example: `ideations/ideation-voice-memos-20260219-143052/`
 
 ## License
 
