@@ -13,9 +13,9 @@
 
 | Version | Directory | Date | Depth | Focus | Parent |
 |---------|-----------|------|-------|-------|--------|
-| v1 | `ideation-<slug>-YYYYMMDD-HHMMSS/` | [date] | [depth level] | Original session | — |
-<!-- | v2 | `ideation-<slug>-v2-YYYYMMDD-HHMMSS/` | [date] | [depth level] | [focus description] | v1 | -->
-<!-- | v2a | `ideation-<slug>-v2a-YYYYMMDD-HHMMSS/` | [date] | [depth level] | [focus description] | v2 | -->
+| v1 | `ideations/ideation-<slug>-YYYYMMDD-HHMMSS/` | [date] | [depth level] | Original session | — |
+<!-- | v2 | `ideations/ideation-<slug>-v2-YYYYMMDD-HHMMSS/` | [date] | [depth level] | [focus description] | v1 | -->
+<!-- | v2a | `ideations/ideation-<slug>-v2a-YYYYMMDD-HHMMSS/` | [date] | [depth level] | [focus description] | v2 | -->
 
 ## Current Session Context
 

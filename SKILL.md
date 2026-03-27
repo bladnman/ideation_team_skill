@@ -6,7 +6,10 @@ description: >
   and documented by a Writer. Three actions: Plan (interview + configure),
   Ideate (depth-aware exploration + conditional production), Continue (versioned
   resumption with smart discovery). Use "prd" mode to generate a Product
-  Requirements Document from a completed session.
+  Requirements Document from a completed session. Trigger terms: brainstorm,
+  ideate, explore concept, creative session, idea generation, concept
+  exploration, multi-agent brainstorm, team ideation, divergent thinking,
+  product ideation, vision document, idea brief.
 argument-hint: "concept seed (file path or inline description). Use 'continue <ref>' to resume a previous session. Use 'prd <ref>' to generate a PRD from a completed session."
 user-invocable: true
 ---
@@ -179,49 +182,52 @@ session's concept seed.
 ## P3: Create Session Directory
 
 Create the session's output structure. Each session gets a **unique, timestamped
-directory** so that multiple invocations never collide:
+directory** inside an `ideations/` parent folder so that multiple invocations
+never collide and all sessions stay organized:
 
 ```
-ideation-<slug>-<YYYYMMDD-HHMMSS>/
+ideations/ideation-<slug>-<YYYYMMDD-HHMMSS>/
 ```
 
-Example: `ideation-distributed-systems-20260219-143052/`
+Example: `ideations/ideation-distributed-systems-20260219-143052/`
 
 The slug is derived from the concept seed (lowercased, spaces replaced with
-hyphens). Place the directory wherever the project's conventions direct written
-output — if the project has no opinion, use the current working directory.
+hyphens). Place the `ideations/` folder wherever the project's conventions
+direct written output — if the project has no opinion, use the current working
+directory.
 
 ```
-ideation-<slug>-<YYYYMMDD-HHMMSS>/
-  # Deliverables — what you open, read, share (created conditionally based on output selection)
-  index.html                      # Distribution page
-  RESULTS_<concept>.pdf           # PDF of the distribution page
-  CAPSULE_<concept>.pdf           # Comprehensive session archive
-  PRESENTATION_<concept>.pptx     # Slide deck
-  images/                         # Infographic images
+ideations/
+  ideation-<slug>-<YYYYMMDD-HHMMSS>/
+    # Deliverables — what you open, read, share (created conditionally based on output selection)
+    index.html                      # Distribution page
+    RESULTS_<concept>.pdf           # PDF of the distribution page
+    CAPSULE_<concept>.pdf           # Comprehensive session archive
+    PRESENTATION_<concept>.pptx     # Slide deck
+    images/                         # Infographic images
 
-  # Session process — working materials from ideation (always created)
-  session/
-    session-config.yaml           # Session configuration (from Plan action)
-    VISION_<concept>.md           # Consolidated vision document (source of truth)
-    SESSION_SUMMARY.md            # Session summary
-    ideation-graph.md             # Writer's living graph of the dialogue
-    LINEAGE.md                    # Version chain (populated for continuations)
-    sources/                      # All original input materials (encapsulated)
-    research/                     # Explorer agent's research reports
-    briefs/                       # Final idea briefs
-    idea-reports/                 # Raw idea reports from dialogue agents
-    snapshots/                    # Writer's version snapshots
+    # Session process — working materials from ideation (always created)
+    session/
+      session-config.yaml           # Session configuration (from Plan action)
+      VISION_<concept>.md           # Consolidated vision document (source of truth)
+      SESSION_SUMMARY.md            # Session summary
+      ideation-graph.md             # Writer's living graph of the dialogue
+      LINEAGE.md                    # Version chain (populated for continuations)
+      sources/                      # All original input materials (encapsulated)
+      research/                     # Explorer agent's research reports
+      briefs/                       # Final idea briefs
+      idea-reports/                 # Raw idea reports from dialogue agents
+      snapshots/                    # Writer's version snapshots
 
-  # Build — scripts and intermediate files
-  build/
-    build_capsule.py              # Generates Results + Capsule PDFs
-    build_presentation.py         # Generates the PPTX
+    # Build — scripts and intermediate files
+    build/
+      build_capsule.py              # Generates Results + Capsule PDFs
+      build_presentation.py         # Generates the PPTX
 ```
 
 Use the Bash tool to create the directory and its structure:
 ```bash
-SESSION_DIR="ideation-$(echo '<concept-slug>' | tr ' ' '-' | tr '[:upper:]' '[:lower:]')-$(date +%Y%m%d-%H%M%S)"
+SESSION_DIR="ideations/ideation-$(echo '<concept-slug>' | tr ' ' '-' | tr '[:upper:]' '[:lower:]')-$(date +%Y%m%d-%H%M%S)"
 mkdir -p "$SESSION_DIR"/images "$SESSION_DIR"/session/sources "$SESSION_DIR"/session/research "$SESSION_DIR"/session/idea-reports "$SESSION_DIR"/session/snapshots "$SESSION_DIR"/session/briefs "$SESSION_DIR"/build
 ```
 
@@ -604,7 +610,7 @@ creates a **new versioned directory** — the parent session is never modified.
 ## Smart Discovery
 
 Triggered when the argument starts with **"continue"** (e.g.,
-`/ideation continue ideation-distributed-systems-20260219-143052/` or
+`/ideation continue ideations/ideation-distributed-systems-20260219-143052/` or
 `/ideation continue distributed-systems`).
 
 ### Resolving the Session Directory
@@ -613,8 +619,9 @@ Triggered when the argument starts with **"continue"** (e.g.,
    absolute) and it exists on disk, use it as the parent session directory.
 
 2. **Keyword given (not a path)** — If the argument after "continue" is a
-   keyword rather than an existing path, search the current working directory
-   for directories matching `ideation-*<keyword>*`:
+   keyword rather than an existing path, search for directories matching
+   `ideation-*<keyword>*` inside the `ideations/` folder in the current
+   working directory (and fall back to CWD itself for legacy sessions):
    - Read each match's `session/session-config.yaml` (if it exists) and the
      vision doc title for context
    - **Single match** → use it directly.
@@ -623,8 +630,8 @@ Triggered when the argument starts with **"continue"** (e.g.,
 
      | Option | Description |
      |--------|-------------|
-     | `ideation-voice-memos-20260219-143052/` | Standard depth, 4 briefs, 2026-02-19 |
-     | `ideation-voice-memos-v2-20260221-091500/` | Deep depth, 6 briefs, 2026-02-21 (continues v1) |
+     | `ideations/ideation-voice-memos-20260219-143052/` | Standard depth, 4 briefs, 2026-02-19 |
+     | `ideations/ideation-voice-memos-v2-20260221-091500/` | Deep depth, 6 briefs, 2026-02-21 (continues v1) |
 
    - **No matches** → stop and ask the user which directory to use.
 
@@ -645,10 +652,10 @@ config system), infer defaults:
 A continuation creates a **new directory**, never modifies the parent:
 
 ```
-Original:     ideation-voice-memos-20260219-143052/
-Continue:     ideation-voice-memos-v2-20260221-091500/
-Continue:     ideation-voice-memos-v3-20260222-140000/
-Branch:       ideation-voice-memos-v2a-20260222-150000/
+Original:     ideations/ideation-voice-memos-20260219-143052/
+Continue:     ideations/ideation-voice-memos-v2-20260221-091500/
+Continue:     ideations/ideation-voice-memos-v3-20260222-140000/
+Branch:       ideations/ideation-voice-memos-v2a-20260222-150000/
 ```
 
 **Version naming rules:**
@@ -738,7 +745,7 @@ session is:
 # ACTION 4: PRD
 
 Triggered when the argument starts with **"prd"** (e.g.,
-`/ideation prd ideation-distributed-systems-20260219-143052/` or
+`/ideation prd ideations/ideation-distributed-systems-20260219-143052/` or
 `/ideation prd distributed-systems`).
 
 This is a **solo operation** — no team is needed. You read the session's
@@ -750,7 +757,8 @@ actions entirely.
 Uses the same logic as Continue action's Smart Discovery:
 
 1. **Path given and exists** — use it directly.
-2. **Keyword given** — search CWD for `ideation-*<keyword>*`:
+2. **Keyword given** — search the `ideations/` folder in CWD (and fall back
+   to CWD itself for legacy sessions) for `ideation-*<keyword>*`:
    - Single match → use it.
    - Multiple matches → present via `AskUserQuestion`.
    - No matches → ask for clarification.
