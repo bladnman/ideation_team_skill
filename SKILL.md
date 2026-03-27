@@ -6,7 +6,10 @@ description: >
   and documented by a Writer. Three actions: Plan (interview + configure),
   Ideate (depth-aware exploration + conditional production), Continue (versioned
   resumption with smart discovery). Use "prd" mode to generate a Product
-  Requirements Document from a completed session.
+  Requirements Document from a completed session. Trigger terms: brainstorm,
+  ideate, explore concept, creative session, idea generation, concept
+  exploration, multi-agent brainstorm, team ideation, divergent thinking,
+  product ideation, vision document, idea brief.
 argument-hint: "concept seed (file path or inline description). Use 'continue <ref>' to resume a previous session. Use 'prd <ref>' to generate a PRD from a completed session."
 user-invocable: true
 ---
